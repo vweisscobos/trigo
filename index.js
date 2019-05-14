@@ -3,8 +3,8 @@
   //	Cria um ponto de acesso aos metodos atraves do objeto global
   global.trigo = {};
 
-  const arrays = [];
-  const bindings = [];
+  const trRepetitions = [];
+  const trBindings = [];
 
   let container = null;
   let model = {};
@@ -70,7 +70,7 @@
 
       tag.addEventListener('change', updateListModel);
 
-      arrays.push(repetition);
+      trRepetitions.push(repetition);
     });
 
 
@@ -84,7 +84,7 @@
 
 
     //  renderiza os laços de repetição e popula as ligações
-    arrays.forEach(rep => {
+    trRepetitions.forEach(rep => {
       rep.render();
     });
     update();
@@ -99,7 +99,7 @@
 
       //  Se o comprimento de um array mudar, renderizar a listagem de novo
       if (Array.isArray(target) && key === 'length') {
-        arrays.forEach(rep => {
+        trRepetitions.forEach(rep => {
           rep.render();
         });
       }
@@ -123,14 +123,15 @@
   const fetchBindingRequests = (container, scope = 'global') => {
     for (let el of container.querySelectorAll('*')) {
       if (!/(<.+>?<\/.+>|<.+\/>)/g.test(el.innerHTML) && /{{([\S\s]+)}}/g.test(el.innerHTML)) {
-        bindings.push(oneWayBinding({element: el, scope: scope}));
+        trBindings.push(oneWayBinding({element: el, scope: scope}));
       }
 
       if (el.hasAttribute('tr-value')) {
-        bindings.push(twoWayBinding({element: el, scope: scope}));
+        trBindings.push(twoWayBinding({element: el, scope: scope}));
       }
     }
   };
+
 
   //  Pega o index do array sendo acessado
   const getItemIndex = (child) => {
@@ -160,6 +161,7 @@
     }
   };
 
+
   //  Cria uma ligação de mão dupla
   const twoWayBinding = ({element, scope}) => {
     let field = element.getAttribute('tr-value');
@@ -172,6 +174,7 @@
       update
     }
   };
+
 
   // Cria uma ligação para as listagens
   const foreachBinding = ({element, scope}) => {
@@ -200,7 +203,7 @@
 
   //  Sincroniza os valores da view com os do modelo
   const update = () => {
-    bindings.forEach(bound => {
+    trBindings.forEach(bound => {
       bound.update();
     });
   };
