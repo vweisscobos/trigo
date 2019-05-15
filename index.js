@@ -51,16 +51,18 @@
       tag.innerHTML = "";
 
       const updateListModel = (evt) => {
+        evt.stopPropagation();
+
         let listItemIndex = getItemIndex(evt.target);
         let field = repetition.model[listItemIndex];
+        let terms = evt.target.getAttribute('tr-value');
+        terms = terms.split(".");
 
-      let terms = evt.target.getAttribute('tr-value').split(".");
+        for (let i = 1; i < terms.length - 1; i++) {
+          field = field[terms[i]];
+        }
 
-      for (let i = 1; i < terms.length - 1; i++) {
-        field = field[terms[i]];
-      }
-
-      field[terms[terms.length - 1]] = evt.target.value;
+        field[terms[terms.length - 1]] = evt.target.value;
 
         update();
       };
@@ -248,7 +250,9 @@
     let i = 0;
 
     while (i < terms.length - 1) {
+      console.log(terms[i]);
       state = state[terms[i]];
+      console.log(state);
       i++;
     }
 
