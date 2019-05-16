@@ -9,6 +9,10 @@
   let container = null;
   let model = {};
 
+  let onUpdate = () => {
+    console.log('Trigo components were updated...');
+  };
+
   /*
    *
    *	Reconhece o container principal, pega todos os elementos com a diretriz tr-value,
@@ -17,11 +21,11 @@
    *	com os valores atuais do estado
    *
    */
-  trigo.init = (state) => {
+  trigo.init = (state, cb) => {
 
     //	Inicializa o container principal
     container = document.querySelector("*[tr-init]");
-
+    trigo.container = container;
 
     //  Os acessos ao modelo passam por um proxy;
     model = new Proxy(state, modelAccessHandler);
@@ -94,8 +98,20 @@
       rep.render();
     });
     update();
+    cb();
 
     return model;
+  };
+
+
+  //  Sets a function to be called when trigo finishes to update
+  trigo.onUpdate = (cb) => {
+    onUpdate = cb;
+  };
+
+  //  Sets a function to be called when trigo first rendered its components
+  trigo.onRendered = (cb) => {
+    onRendered = cb;
   };
 
   //  Handler do proxy que intercepta os acessos ao modelo
@@ -220,6 +236,7 @@
     trBindings.forEach(bound => {
       bound.update();
     });
+    onUpdate();
   };
 
 
@@ -262,9 +279,7 @@
     let i = 0;
 
     while (i < terms.length - 1) {
-      console.log(terms[i]);
       state = state[terms[i]];
-      console.log(state);
       i++;
     }
 
