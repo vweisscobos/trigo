@@ -62,6 +62,11 @@
           field = field[terms[i]];
         }
 
+        if (evt.type === 'change' && evt.target.type === 'checkbox') {
+          field[terms[terms.length - 1]] = !field[terms[terms.length - 1]];
+          return;
+        }
+
         field[terms[terms.length - 1]] = evt.target.value;
 
         update();
@@ -69,7 +74,6 @@
 
       //  configura o pai para ouvir mudanças nos campos
       tag.addEventListener('keyup', updateListModel);
-
       tag.addEventListener('change', updateListModel);
 
       trRepetitions.push(repetition);
@@ -134,6 +138,10 @@
     }
   };
 
+  const toggleCheckBox = (target, value) => {
+
+  };
+
 
   //  Pega o index do array sendo acessado
   const getItemIndex = (child) => {
@@ -170,6 +178,10 @@
 
     const update = () => {
       element.value = getStateValue(field, scope);
+
+      if (element.type === 'checkbox') {
+        element.value === 'true' ? element.setAttribute('checked', '') : element.removeAttribute('checked');
+      }
     };
 
     return {
