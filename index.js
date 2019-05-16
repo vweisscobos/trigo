@@ -21,7 +21,7 @@
    *	com os valores atuais do estado
    *
    */
-  trigo.init = (state, cb) => {
+  trigo.init = (state, cb = null) => {
 
     //	Inicializa o container principal
     container = document.querySelector("*[tr-init]");
@@ -109,10 +109,6 @@
     onUpdate = cb;
   };
 
-  //  Sets a function to be called when trigo first rendered its components
-  trigo.onRendered = (cb) => {
-    onRendered = cb;
-  };
 
   //  Handler do proxy que intercepta os acessos ao modelo
   const modelAccessHandler = {
@@ -257,10 +253,10 @@
       value = model;
 
       for (let i = 0; i < terms.length; i++) {
-        value = value[terms[i]];
+        value = value[terms[i]] || '';
       }
 
-      return value;
+      return value || '';
     }
 
     value = scope;
